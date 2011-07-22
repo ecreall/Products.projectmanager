@@ -9,7 +9,8 @@
 
 <metal:main metal:fill-slot="main">
 
-  <div id="project-pert">
+  <div id="project-pert"
+       tal:define="here_url context/absolute_url">
     <div id="pert-legend">
     <span i18n:translate="">Legend</span>
     <table style="border-collapse: collapse; font-size:1.3em; color: black">
