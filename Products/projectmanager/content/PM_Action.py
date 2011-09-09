@@ -279,6 +279,16 @@ class PM_Action(ATFolder):
                                         review_state=review_state)
                     send(message.encode(encoding))
 
+    def start(self):
+        """Start date is actions start date
+        """
+        return self.getMStartDate()
+
+    def end(self):
+        """End date is real end date if it has been set,
+        else it is estimated end date
+        """
+        return self.getMEndDate() or self.getMEstimatedEndDate()
 
 
 registerType(PM_Action, PROJECTNAME)

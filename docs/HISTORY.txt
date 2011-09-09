@@ -1,8 +1,11 @@
 Changelog
 =========
 
-1.1.2 (unreleased)
-------------------
+1.2 (unreleased)
+----------------
+
+- Action start and end (real or estimated) dates
+  are indexed in start and end indexes.
 
 - Plone 4.1 compatible.
 
