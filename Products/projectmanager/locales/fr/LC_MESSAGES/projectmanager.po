@@ -246,7 +246,7 @@ msgstr ""
 #. Default: "Action ${content_name} state changed to: ${review_state}"
 #: ./skins/projectmanager/PM_not_running_notification_template.pt:12
 msgid "not_running_notification_subject"
-msgstr "L'action ${content_name} a changée d'état : ${review_state}"
+msgstr "L'action ${content_name} a changé d'état : ${review_state}"
 
 #. Default: "To be able to finish this action you must fill the end date"
 #: ./skins/projectmanager/pm_action_view.pt:11
