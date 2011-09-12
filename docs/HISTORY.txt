@@ -4,10 +4,15 @@ Changelog
 1.2 (unreleased)
 ----------------
 
+- Action has ical export support.
+  [thomasdesvenain]
+
 - Action start and end (real or estimated) dates
   are indexed in start and end indexes.
+  [thomasdesvenain]
 
 - Plone 4.1 compatible.
+  [thomasdesvenain]
 
 
 1.1.1 (2010-11-12)

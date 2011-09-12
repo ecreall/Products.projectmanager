@@ -12,6 +12,8 @@
 __author__ = """Michael Launay <michaellaunay@ecreall.com>"""
 __docformat__ = 'plaintext'
 
+from StringIO import StringIO
+from DateTime import DateTime
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes.atapi import *
 from zope.interface import implements
@@ -19,8 +21,11 @@ import interfaces
 
 from Products.CMFDynamicViewFTI.browserdefault import BrowserDefaultMixin
 
+from Products.ATContentTypes.lib.calendarsupport import ICS_EVENT_START, vformat,\
+    ICS_EVENT_END, rfc2445dt, foldLine
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import \
     ReferenceBrowserWidget
+from Products.ATContentTypes.interfaces.interfaces import ICalendarSupport
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.ATContentTypes.content.folder import ATFolderSchema
 from Products.projectmanager.config import *
@@ -158,7 +163,7 @@ class PM_Action(ATFolder):
     """
     security = ClassSecurityInfo()
 
-    implements(interfaces.IPM_Action)
+    implements((interfaces.IPM_Action, ICalendarSupport))
 
     meta_type = 'PM_Action'
     _at_rename_after_creation = True
@@ -289,6 +294,59 @@ class PM_Action(ATFolder):
         else it is estimated end date
         """
         return self.getMEndDate() or self.getMEstimatedEndDate()
+
+
+    security.declareProtected('View', 'getICal')
+    def getICal(self):
+        """get iCal data
+        """
+        out = StringIO()
+        map = {
+            'dtstamp'   : rfc2445dt(DateTime()),
+            'created'   : rfc2445dt(DateTime(self.CreationDate())),
+            'uid'       : self.UID(),
+            'modified'  : rfc2445dt(DateTime(self.ModificationDate())),
+            'summary'   : vformat(self.Title()),
+            'startdate' : rfc2445dt(self.start()),
+            'enddate'   : rfc2445dt(self.end()),
+            }
+        out.write(ICS_EVENT_START % map)
+
+        description = self.Description()
+        if description:
+            out.write(foldLine('DESCRIPTION:%s\n' % vformat(description)))
+
+        subject = self.Subject()
+        if subject:
+            out.write('CATEGORIES:%s\n' % ','.join(subject))
+
+        # TODO  -- NO! see the RFC; ORGANIZER field is not to be used for non-group-scheduled entities
+        #ORGANIZER;CN=%(name):MAILTO=%(email)
+        #ATTENDEE;CN=%(name);ROLE=REQ-PARTICIPANT:mailto:%(email)
+
+        cn = []
+        mtool = getToolByName(self, 'portal_membership')
+        human_resources = self.getMHumanRessources()
+        if len(human_resources) > 0:
+            human_resouce = human_resources[0]
+            user_id = human_resouce.split(':')[0]
+            user = mtool.getMemberById(user_id)
+            contact_name = user.getProperty('fullname', user_id)
+            cn.append(contact_name)
+
+            contact_phone = user.getProperty('phone', '')
+            if contact_phone:
+                cn.append('')
+
+            email = user.getProperty('email', '')
+            if email:
+                cn.append(email)
+                out.write('CONTACT:%s\n' % vformat(', '.join(cn)))
+
+        url = self.absolute_url()
+        out.write('URL:%s\n' % url)
+        out.write(ICS_EVENT_END)
+        return out.getvalue()
 
 
 registerType(PM_Action, PROJECTNAME)
