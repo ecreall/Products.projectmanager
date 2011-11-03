@@ -4,7 +4,8 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed Plone 4.1 compatibility on *action* pert view.
+  [thomasdesvenain]
 
 
 1.2 (2011-09-22)
