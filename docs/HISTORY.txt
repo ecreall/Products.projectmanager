@@ -4,6 +4,10 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
+- Added getHumanResources method, with column in brains,
+  that gets list of selected resources.
+  [thomasdesvenain]
+
 - Fixed Plone 4.1 compatibility on *action* pert view.
   [thomasdesvenain]
 

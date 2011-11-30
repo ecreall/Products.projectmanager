@@ -348,6 +348,9 @@ class PM_Action(ATFolder):
         out.write(ICS_EVENT_END)
         return out.getvalue()
 
+    def getHumanResources(self):
+        return [hr.split(':')[0] for hr in self.getMHumanRessources()]
+
 
 registerType(PM_Action, PROJECTNAME)
 # end of class PM_Action

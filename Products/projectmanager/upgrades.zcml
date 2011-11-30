@@ -11,4 +11,12 @@
       handler=".upgrades.reindex_actions"
       profile="Products.projectmanager:default" />
 
+  <genericsetup:upgradeStep
+      title="Add human resources column"
+      description="Add catalog column and reindex objects to reach metadata version 2"
+      source="2"
+      destination="3"
+      handler=".upgrades.add_hr_column"
+      profile="Products.projectmanager:default" />
+
 </configure>
