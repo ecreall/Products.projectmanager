@@ -1,8 +1,7 @@
 """Define a Gantt browser view for the Task content type.
 """
 
-from Acquisition import aq_inner
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 
 from diagramview import DiagramView
 
